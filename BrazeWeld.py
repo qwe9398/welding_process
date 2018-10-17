@@ -1,13 +1,9 @@
-# coding: utf-8
-from sqlalchemy import Column, Float, text ,INTEGER
-from sqlalchemy.dialects.mysql import VARCHAR
+# coding=utf-8
+from sqlalchemy import create_engine,Column,VARCHAR,Float,text,INTEGER
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-
-#cmd运行 sqlacodegen --tables （某一张表） --outfile ../../mappers/Found.py（输出文件目录） mysql+pymysql://root:123456@localhost:3306/welding_process
 sqlusername = 'root'
 sqlpassword = '123456'
 sqlport = '3306'
@@ -15,22 +11,20 @@ sqldatabase = 'test'
 url = 'mysql+pymysql://{}:{}@localhost:{}/{}?charset=utf8'.format(sqlusername,sqlpassword,sqlport,sqldatabase)
 
 engine = create_engine(url,encoding='utf-8',echo=True)
-#创建实例，连接test库，编码类型utf-8，echo=True显示信息
-
-Base = declarative_base()   #生成orm基类
+Base = declarative_base(bind=engine)
 
 class BrazeWeld(Base):
     __tablename__ = 'braze_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
-    workpiece_id_a = Column(VARCHAR(255), nullable=False,comment='a侧工件编号')
-    workpiece_id_b = Column(VARCHAR(255), nullable=False,comment='b侧工件编号')
-    joint_form = Column(VARCHAR(255),comment='接头形式')
-    brazing_filler_model = Column(VARCHAR(255), nullable=False,comment='钎料型号')
-    brazing_flux_model = Column(VARCHAR(255),comment='钎剂型号')
-    temperature = Column(Float, nullable=False,comment='温度  单位℃')
-    shield_gas_type = Column(VARCHAR(255),comment='保护气类型')
-    shield_gas_flow = Column(Float,comment='保护气流量  单位L/min')
+    workpiece_id_a = Column(VARCHAR(255), nullable=False)
+    workpiece_id_b = Column(VARCHAR(255), nullable=False)
+    joint_form = Column(VARCHAR(255))
+    brazing_filler_model = Column(VARCHAR(255), nullable=False)
+    brazing_flux_model = Column(VARCHAR(255))
+    temperature = Column(Float, nullable=False)
+    shield_gas_type = Column(VARCHAR(255))
+    shield_gas_flow = Column(Float)
     remark = Column(VARCHAR(255))
     image_url = Column(VARCHAR(255))
 
@@ -38,9 +32,60 @@ class BrazeWeld(Base):
         'mysql_charset': 'utf8'    #定义类的编码类型为utf8
 
     }
+    def __init__(self,weld_method,workpiece_id_a,workpiece_id_b,joint_form,brazing_filler_model,brazing_flux_model,temperature,
+                 shield_gas_type,shield_gas_flow,remark,image_url):
+        self.weld_method = weld_method
+        self.workpiece_id_a = workpiece_id_a
+        self.workpiece_id_b = workpiece_id_b
+        self.joint_form = joint_form
+        self.brazing_filler_model = brazing_filler_model
+        self.brazing_flux_model = brazing_flux_model
+        self.temperature = temperature
+        self.shield_gas_type = shield_gas_type
+        self.shield_gas_flow = shield_gas_flow
+        self.remark = remark
+        self.image_url = image_url
 
 
+Session = sessionmaker(bind=engine)
+session = Session()
+result =session.query(BrazeWeld).filter().all()  #导出表中所有数据
+for x in result:   #通过for循环，逐条删除method_abbreviate这一列数据中字符串的末尾的空格，再重新修改数据库中的数据
+    #print(x.weld_method)     #原始数据
+    y1 = x.weld_method.strip()      #删除首位空格，重新赋值新数据
+    print(x.weld_method+"→"+y1)                              #修改之后的数据
+    session.query(BrazeWeld).filter(BrazeWeld.weld_method == x.weld_method).update({"weld_method":y1})
+    #将修改后的数据y重新对表中数据进行修改——将y的字符串分别赋值到表method_abbreviate这一列对应的数据
 
+    y2 = x.workpiece_id_a.strip()
+    print(x.workpiece_id_a+"→"+y2)
+    session.query(BrazeWeld).filter(BrazeWeld.workpiece_id_a == x.workpiece_id_a).update({"workpiece_id_a": y2})
+
+    y3 = x.workpiece_id_b.strip()
+    print(x.workpiece_id_b+"→"+y3)
+    session.query(BrazeWeld).filter(BrazeWeld.workpiece_id_b == x.workpiece_id_b).update({"workpiece_id_b": y3})
+
+    y4 = x.joint_form.strip()
+    print(x.joint_form + "→" + y4)
+    session.query(BrazeWeld).filter(BrazeWeld.joint_form == x.joint_form).update({"joint_form": y4})
+
+    y5 = x.brazing_filler_model.strip()
+    print(x.brazing_filler_model + "→" + y5)
+    session.query(BrazeWeld).filter(BrazeWeld.brazing_filler_model == x.brazing_filler_model).update({"brazing_filler_model": y5})
+
+    y6 = x.brazing_flux_model.strip()
+    print(x.brazing_flux_model + "→" + y6)
+    session.query(BrazeWeld).filter(BrazeWeld.brazing_flux_model == x.brazing_flux_model).update({"brazing_flux_model": y6})
+
+    y7 = x.shield_gas_type.strip()
+    print(x.shield_gas_type + "→" + y7)
+    session.query(BrazeWeld).filter(BrazeWeld.shield_gas_type == x.shield_gas_type).update({"shield_gas_type": y7})
+
+    #session.commit()             # 会话提交，执行数据库操作
+    #session.close()               # 结束会话
+
+
+"""
 class DMeltingPolarArcWeld(Base):
     __tablename__ = 'd_melting_polar_arc_weld'
 
@@ -415,11 +460,4 @@ class AbbreviateCompare(Base):#焊接方法英文缩写中文对照表
     method_chinese_name = Column(VARCHAR(255))
     table_abbreviate = Column(VARCHAR(255))
     table_chinese_name = Column(VARCHAR(255))
-
-
-Base.metadata.create_all(engine)   #创建以上类对应的数据表结构，若已存在，则忽略
-
-
-Session = sessionmaker(engine)     #创建与数据库的会话Session,注意,这里返回给session的是个class,不是实例
-session = Session()                #生成Session实例，相当于游标
-session.commit()                   #统一提交会话，执行操作
+"""
