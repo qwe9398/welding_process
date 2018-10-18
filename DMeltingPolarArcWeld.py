@@ -56,4 +56,4 @@ class DMeltingPolarArcWeld(Base):
     remark = Column(VARCHAR(255))
     image_url = Column(VARCHAR(255))
 
-    def __init__(self,):
+
