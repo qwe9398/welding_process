@@ -19,7 +19,7 @@ engine = create_engine(url,encoding='utf-8',echo=True)
 
 Base = declarative_base()   #生成orm基类
 
-class BrazeWeld(Base):
+class BrazeWeld(Base):#钎焊
     __tablename__ = 'braze_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -41,7 +41,7 @@ class BrazeWeld(Base):
 
 
 
-class DMeltingPolarArcWeld(Base):
+class DMeltingPolarArcWeld(Base):#双丝熔化极电弧气保焊
     __tablename__ = 'd_melting_polar_arc_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -85,7 +85,7 @@ class DMeltingPolarArcWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class ElectricResistanceWeld(Base):
+class ElectricResistanceWeld(Base):#电阻焊
     __tablename__ = 'electric_resistance_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -100,7 +100,7 @@ class ElectricResistanceWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class FrictionStirWeld(Base):
+class FrictionStirWeld(Base):#搅拌摩擦焊
     __tablename__ = 'friction_stir_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -123,7 +123,7 @@ class FrictionStirWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class FrictionStudWeld(Base):
+class FrictionStudWeld(Base):#摩擦螺柱焊
     __tablename__ = 'friction_stud_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -140,7 +140,7 @@ class FrictionStudWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class LaserBeamWeld(Base):
+class LaserBeamWeld(Base):#激光焊
     __tablename__ = 'laser_beam_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -175,7 +175,7 @@ class LaserBeamWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class ManualWeldingRodWeld(Base):
+class ManualWeldingRodWeld(Base):#手工焊条焊
     __tablename__ = 'manual_welding_rod_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -200,7 +200,7 @@ class ManualWeldingRodWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class MeltingPolarArcWeld(Base):
+class MeltingPolarArcWeld(Base):#熔化极电弧气保焊
     __tablename__ = 'melting_polar_arc_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -240,7 +240,7 @@ class MeltingPolarArcWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class NonMeltingPolarArcWeld(Base):
+class NonMeltingPolarArcWeld(Base):#非熔化极电弧气保焊
     __tablename__ = 'non_melting_polar_arc_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -285,7 +285,7 @@ class NonMeltingPolarArcWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class ProductInfo(Base):
+class ProductInfo(Base):#产品信息
     __tablename__ = 'product_info'
 
     product_id = Column(VARCHAR(255), primary_key=True,comment='产品id=product_code+weld_number')
@@ -321,7 +321,7 @@ class ProductInfo(Base):
     weld_order = Column(VARCHAR(255),comment='（焊缝）焊接顺序    焊接工序')
 
 
-class RobotAttitude(Base):
+class RobotAttitude(Base):#机器人运动姿态
     __tablename__ = 'robot_attitude'
 
     work_id = Column(VARCHAR(255), primary_key=True,comment='工作id')
@@ -342,7 +342,7 @@ class RobotAttitude(Base):
     Image_url = Column(VARCHAR(255))
 
 
-class SubmergeArcWeld(Base):
+class SubmergeArcWeld(Base):#埋弧焊
     __tablename__ = 'submerge_arc_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -368,7 +368,7 @@ class SubmergeArcWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class VacuumElectronBeamWeld(Base):
+class VacuumElectronBeamWeld(Base):#真空电子束焊
     __tablename__ = 'vacuum_electron_beam_weld'
 
     weld_method = Column(VARCHAR(255), primary_key=True,comment='焊接方法编号')
@@ -395,7 +395,7 @@ class VacuumElectronBeamWeld(Base):
     image_url = Column(VARCHAR(255))
 
 
-class WorkpieceInfo(Base):
+class WorkpieceInfo(Base):#工件信息
     __tablename__ = 'workpiece_info'
 
     workpiece_id = Column(VARCHAR(255), primary_key=True,comment='工件id')
